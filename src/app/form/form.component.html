@@ -1,0 +1,123 @@
+<div class="container">
+    <div class="row d-flex bg-white">
+        <div class="col-12 card bg-white border shadow m-4">
+            <div class="card-header bg-white">
+                <p class="fw-bold">Agregar informacion de salarios</p>
+            </div>
+            <div class="card-body">
+                <form action="" [formGroup]="form">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Codigo de empleado</label>
+                            <input type="text" name="" id="" class="form-control rounded-0" formControlName="code_employee">
+                            <span class="text-danger fw-bold" *ngIf="f_validation['code_employee']?.invalid && (f_validation['code_employee']?.dirty || f_validation['code_employee']?.touched)">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <label for="">Indentificacion de empleado</label>
+                            <input type="text" name="" class="form-control rounded-0" id="" formControlName="identification">
+                            <span class="text-danger fw-bold" *ngIf="f_validation['identification']?.invalid && (f_validation['identification']?.dirty || f_validation['identification']?.touched)">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Nombres</label>
+                            <input type="text" name="" id="" class="form-control rounded-0" formControlName="name_employee">
+                            <span class="text-danger fw-bold" *ngIf="f_validation['name_employee']?.invalid && (f_validation['name_employee']?.dirty || f_validation['name_employee']?.touched)">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <label for="">Apellidos</label>
+                            <input type="text" name="" class="form-control rounded-0" id="" formControlName="surname_employee">
+                            <span class="text-danger fw-bold" *ngIf="f_validation['surname_employee']?.invalid && (f_validation['surname_employee']?.dirty || f_validation['surname_employee']?.touched)">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Fecha de entrada</label>
+                            <input type="date" name="" id="" class="form-control rounded-0" formControlName="begin_date">
+                            <span class="text-danger fw-bold"  *ngIf="f_validation['birthday']?.errors?.['beginDateValidation'] && (f_validation['birthday']?.dirty || f_validation['birthday']?.touched)">
+                                La fecha de inicio sobrepasa la fecha de hoy
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <label for="">Fecha de nacimiento</label>
+                            <input type="date" name="" class="form-control rounded-0" id="" formControlName="birthday">
+                            
+                            <span class="text-danger fw-bold"  *ngIf="f_validation['birthday']?.errors?.['birthday'] && (f_validation['birthday']?.dirty || f_validation['birthday']?.touched)">
+                                El usuario no tiene la edad suficiente
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end p-2">
+                            <button class="btn btn-primary" (click)="addForm()">Nuevo salario</button>
+                        </div>
+                        <div formArrayName="salaries"
+                            *ngFor="let item of salaries.controls; let i=index">
+                            <div [formGroupName]="i">
+                                <div class="row mt-2 mb-2">
+                                    <div class="col">
+                                        <div class="input-group">
+                                          
+                                            <input type="number" formControlName="year" class="form-control rounded-0 rounded-0">
+                                            <span *ngIf="salaries.get('year')?.errors?.['required'] && (salaries.get('year')?.dirty || salaries.get('year')?.touched)">Requerido</span>
+                                            <select formControlName="month" class="form-control rounded-0" >
+                                                <option value="">Mes</option>
+                                                <option value=1>Enero</option>
+                                                <option value=2>Febrero</option>
+                                                <option value=3>Marzo</option>
+                                                <option value=4>Abril</option>
+                                                <option value=5>Mayo</option>
+                                                <option value=6>Junio</option>
+                                                <option value=7>Julo</option>
+                                                <option value=8>Agosto</option>
+                                                <option value=9>Septiembre</option>
+                                                <option value=10>Octubre</option>
+                                                <option value=11>Noviembre</option>
+                                                <option value=12>Diciembre</option>
+                                            </select>
+                                            <span ></span>
+                                            
+                                            <input type="number" formControlName="grade" class="form-control rounded-0">
+                                            <select formControlName="office" class="form-control rounded-0">
+                                                <option value="">Oficina</option>
+                                                <option *ngFor="let item of offices;" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                            <select formControlName="position" class="form-control rounded-0">
+                                                <option value="">Posicion</option>
+                                                <option *ngFor="let item of positions;" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                            <select formControlName="division" class="form-control rounded-0">
+                                                <option value="">Division</option>
+                                                <option *ngFor="let item of divisions;" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                            <input type="number" formControlName="base_salary" class="form-control rounded-0">
+                                            <input type="number" formControlName="production_bonus" class="form-control rounded-0">
+                                            <input type="number" formControlName="compesation_bonus" class="form-control rounded-0">
+                                            <input type="number" formControlName="comission" class="form-control rounded-0">
+                                            <input type="number" formControlName="contribution" class="form-control rounded-0">
+                                            <button class="btn btn-danger text-white" (click)="removeItem(i)">X</button>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end">
+                            <a [routerLink]="'/'" class="btn btn-danger m-2">Cancelar</a>
+                            <button type="submit" class="btn btn-success m-2" (click)="save()">Guardar datos</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
