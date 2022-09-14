@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { IDivision } from '../interfaces/IDivision';
 import { IOffice } from '../interfaces/IOffice';
 import { IPosition } from '../interfaces/Iposition';
@@ -41,7 +41,7 @@ export class FormComponent implements OnInit {
       surname_employee: new FormControl('', [Validators.required]),
       begin_date: new FormControl('', [Validators.required, this.customValidators.beginDateValidation]),
       birthday: new FormControl('', [Validators.required, this.customValidators.birthdayValidation]),
-      salaries: new FormArray([])
+      salaries: new FormArray([], [Validators.required, Validators.min(1)])
     });
   }
 
@@ -69,6 +69,9 @@ export class FormComponent implements OnInit {
     return this.form.controls;
   }
 
+  get f_validation_array(): FormArray {
+    return this.form.get('employees') as FormArray;
+  } 
   buildSalaryForm() {
     var form = new FormGroup({
         year: new FormControl('', [Validators.required, Validators.min(1990), Validators.max(new Date().getFullYear())]),
@@ -106,24 +109,24 @@ export class FormComponent implements OnInit {
     let listDataSalary: [] = this.salaries.value;
     let listData: any[] = [];
     listDataSalary.forEach(element => {
-        parseInt(element['month']);
-        this.divisions.find(x => x.id == element['division']);
-        this.positions.find(x => x.id == element['position']);
-        this.offices.find(x => x.id == element['office']);
-
         let data = {
           month: element['month'],
-          division: this.divisions.find(x => x.id == element['division']),
-          position: this.positions.find(x => x.id == element['position']),
-          office :this.offices.find(x => x.id == element['office']),
+          divisionId: element['division'],
+          positionId: element['position'],
+          officeId :element['office'],
           year: element['year'],
           base_salary: element['base_salary'],
           production_bonus: element['production_bonus'],
-          compesation_bonus: element['compesation_bonus'],
-          comission: element['comission'],
-          contribution : element['contribution'],
+          compensation_bonus: element['compesation_bonus'],
+          commission: element['comission'],
+          contributions : element['contribution'],
           grade : element['grade'],
-          
+          employee_code: this.form.controls['code_employee'].value,
+          identification : this.form.controls['identification'].value,
+          employee_name: this.form.controls['name_employee'].value,
+          employee_surname: this.form.controls['surname_employee'].value,
+          begin_date: this.form.controls['begin_date'].value,
+          birthday: this.form.controls['birthday'].value,
         }
         listData.push(Object.assign(this.getObjForm(), data))
     });
@@ -144,6 +147,19 @@ export class FormComponent implements OnInit {
     }
     
     return data;
+  }
+
+  getFormValidationErrors() {
+    
+    console.log('%c ==>> Validation Errors: ', 'color: red; font-weight: bold; font-size:25px;');
+  
+    let totalErrors = 0;
+  
+    Object.keys(this.form.controls).forEach(key => {
+      console.log(this.form.controls[key].errors);
+    });
+  
+    console.log('Number of errors: ' ,totalErrors);
   }
 
   transformData() {

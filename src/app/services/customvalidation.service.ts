@@ -31,7 +31,7 @@ export class CustomvalidationService {
       };
      }
      return {
-      'begin_date_error': true
+      'begin_date_error': false
     };
   }
 
